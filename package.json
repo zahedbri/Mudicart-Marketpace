@@ -1,0 +1,85 @@
+{
+  "name": "@ecomplus/admin-marketplace",
+  "version": "0.2.24",
+  "description": "Apps marketplace for E-Com Plus admin with Vue.js SPA",
+  "author": "E-Com Club <ti@e-com.club>",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "build:site": "vue-cli-service build --site",
+    "release": "npm run build && standard-version",
+    "release:rc": "npm run build && standard-version --prerelease rc"
+  },
+  "dependencies": {
+    "@ecomplus/apps-manager": "^0.3.2",
+    "@ecomplus/client": "^2.1.3",
+    "@ecomplus/i18n": "^1.17.0",
+    "@ecomplus/utils": "^1.4.1",
+    "babel-runtime": "^6.26.0",
+    "bootstrap-vue": "^2.19.0",
+    "core-js": "^3.7.0",
+    "cosmic": "^0.0.0",
+    "lodash.clonedeep": "^4.5.0",
+    "papaparse": "^5.3.0",
+    "popper.js": "^1.16.1",
+    "register-service-worker": "^1.7.1",
+    "vue": "^2.6.12",
+    "vue-cleave-component": "^2.1.3",
+    "vue-gtm": "^3.1.1",
+    "vue-lang-router": "^1.0.1",
+    "vue-markdown": "^2.2.4",
+    "vue-router": "^3.4.9",
+    "vue2-transitions": "^0.3.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@vue/cli-plugin-babel": "^4.5.8",
+    "@vue/cli-plugin-eslint": "^4.5.8",
+    "@vue/cli-plugin-router": "^4.5.8",
+    "@vue/cli-plugin-vuex": "^4.5.8",
+    "@vue/cli-service": "^4.5.8",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "@y3ticorp/vue-cli-plugin-google-analytics": "^1.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.13.0",
+    "eslint-plugin-vue": "^7.1.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "sass": "^1.29.0",
+    "sass-loader": "^10.0.5",
+    "standard": "^16.0.1",
+    "standard-version": "^9.0.0",
+    "vue-cli-plugin-lang-router": "^1.0.0",
+    "vue-cli-plugin-pwa": "^4.6.0",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "bugs": {
+    "url": "https://github.com/ecomplus/admin-marketplace/issues"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "homepage": "https://github.com/ecomplus/admin-marketplace#readme",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "license": "AGPL-3.0",
+  "lint-staged": {
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ecomplus/admin-marketplace.git"
+  }
+}

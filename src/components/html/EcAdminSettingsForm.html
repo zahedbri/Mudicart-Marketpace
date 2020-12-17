@@ -1,0 +1,175 @@
+<div>
+  <form @submit.prevent="handleSubmit">
+    <div
+      role="tablist"
+      v-for="({ header, description, fields }, i) in settingsFieldGroups"
+      class="card border mb-2"
+      :key="`card-${i}`"
+    >
+      <div>
+        <h5
+          role="button"
+          class="card-title bg-light"
+          @click="visibleCollapse = i"
+        >
+          {{ header }}
+        </h5>
+      </div>
+
+      <b-collapse
+        class="card-body"
+        accordion="admin-settings"
+        :id="'collapse-' + i"
+        :visible="visibleCollapse === i"
+      >
+        <div
+          v-for="(config) in fields"
+          :key="`${Boolean(config.hide).toString()}-${config.field}`"
+        >
+          <div
+            class="alert alert-info"
+            v-if="description"
+            v-html="getDescriptionHtml(description)"
+          ></div>
+
+          <template v-if="checkNestedObjectsArray(config.schema)">
+            <div
+              v-for="({ dataList, lowerCaseTitle, field }) in [{
+                ...config,
+                dataList: config.hide ? hiddenData[config.field] : data[config.field],
+                lowerCaseTitle: (config.schema.items.title || '').toLowerCase()
+              }]"
+              key="nested"
+            >
+              <div class="d-flex align-items-center">
+                <button
+                  class="mr-2 btn btn-secundary btn-sm"
+                  @click.prevent="dataList.push({})"
+                >
+                  {{ `${i19add} ${lowerCaseTitle}` }}
+                </button>
+
+                <div
+                  class="custom-file"
+                  style="max-width: 200px"
+                >
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    accept=".csv"
+                    @change="ev => uploadCsv(dataList, ev.target.files && ev.target.files[0])"
+                  >
+                  <label class="custom-file-label">
+                    <i class="fas fa-upload mr-2"></i>
+                    {{ i19upload }}
+                  </label>
+                </div>
+              </div>
+
+              <div class="mt-3 mb-4 list-group">
+                <div
+                  v-for="(item, index) in dataList"
+                  class="border rouded mb-2 p-2"
+                >
+                  <div>
+                    <a
+                      slot="title"
+                      class="text-muted"
+                      href="#"
+                      @click.prevent="dataListsIndexes[field] = index"
+                    >
+                      <span
+                        v-if="dataListsIndexes[field] === index"
+                        key="editing"
+                      >
+                        <i class="fas fa-pen-square mr-1"></i>
+                        {{ `${i19editing} ${lowerCaseTitle}` }}
+                      </span>
+
+                      <span v-else key="edit">
+                        <i class="fas fa-pen mr-1"></i>
+                        {{ i19edit }}
+                      </span>
+
+                      <samp class="ml-1">
+                        #{{ (index + 1) }}
+                      </samp>
+                    </a>
+
+                    <div
+                      slot="description"
+                      class="text-muted"
+                    >
+                      {{ getObjectValues(item) }}
+                      <div
+                        class="mt-2"
+                        v-if="dataListsIndexes[field] === index"
+                      >
+                        <button
+                          class="btn btn-outline-danger btn-xs"
+                          @click.prevent="removeDataListElement(dataList, index, field)"
+                        >
+                          {{ i19delete }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <div :key="formResetKey">
+            <div
+              v-for="({
+                field,
+                name,
+                schema,
+                component,
+                data
+              }) in parseAdminSettingsField(config)"
+              :key="name"
+              class="form-group"
+            >
+              <label class="h6">
+                {{ schema.title || field }}
+              </label>
+              <component
+                v-bind="{ name, schema }"
+                v-model="data[field]"
+                :is="component"
+              />
+              <template v-if="schema.description">
+                <span
+                  v-html="getDescriptionHtml(schema.description)"
+                  class="text-muted"
+                >
+                </span>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+          :disabled="isSaving"
+        >
+          <span
+            class="d-inline-block"
+            style="width: 1.15rem"
+          >
+            <span v-if="isSaving">
+              <i class="fas fa-circle-notch fa-spin"></i>
+            </span>
+            <i
+              v-else
+              class="fas fa-save"
+            ></i>
+          </span>
+          {{ i19save }}
+        </button>
+      </b-collapse>
+    </div>
+  </form>
+</div>

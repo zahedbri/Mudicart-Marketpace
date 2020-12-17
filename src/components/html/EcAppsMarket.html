@@ -1,0 +1,85 @@
+<div class="ec-apps-market">
+  <div class="card pt-3 pl-3">
+    <h1>
+      {{ i19applications }}
+    </h1>
+    <ul
+      class="nav nav-tabs"
+      v-model="activeTabKey"
+    >
+      <li
+        v-for="(label, key) in tabs"
+        class="nav-item"
+        :key="key"
+      >
+        <a
+          class="nav-link"
+          :class="{ active: activeTabKey === key }"
+          role="button"
+          @click="activeTabKey = key"
+        >
+          {{ label }}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <fade-transition :duration="{ enter: 500, leave: 0 }">
+    <div
+      v-if="!loading"
+      class="pt-2"
+    >
+      <div
+        v-if="loadError"
+        class="alert alert-warning"
+        role="alert"
+      >
+        {{ errorMessage }}
+        <a
+          href="#"
+          class="alert-link"
+          @click.prevent="updateTabContent"
+        >
+          {{ i19tryAgain }}
+        </a>
+      </div>
+
+      <article
+        v-else
+        key="list"
+      >
+        <div class="row">
+          <div
+            class="col-6 col-md-4 col-lg-3"
+            v-for="(app, i) in apps"
+            :key="`app-${i}`"
+          >
+            <component
+              :is="activeTabKey === 'market' ? 'ec-app-card' : 'ec-installed-app-card'"
+              :app.sync="apps[i]"
+              :ecomApps="ecomApps"
+              @click="$emit('click:app', app)"
+              class="mb-4"
+            />
+          </div>
+        </div>
+      </article>
+    </div>
+  </fade-transition>
+
+  <div
+    v-if="loading"
+    class="row"
+  >
+    <div
+      class="col-6 col-md-4 col-lg-3"
+      v-for="i in 4"
+      :key="`skeleton-${i}`"
+    >
+      <b-skeleton
+        class="mb-4"
+        :height="`${Math.random() * (260 - 120) + 120}px`"
+      ></b-skeleton>
+    </div>
+  </div>
+</div>

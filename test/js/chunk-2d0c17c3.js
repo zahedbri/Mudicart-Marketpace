@@ -1,0 +1,2 @@
+(window["webpackJsonp_ecomplus_marketplace"]=window["webpackJsonp_ecomplus_marketplace"]||[]).push([["chunk-2d0c17c3"],{"45f2":function(e){e.exports=JSON.parse('{"hello":"Ahoj!","about":{"example":"Tohle je stránka O nás."}}')}}]);
+//# sourceMappingURL=chunk-2d0c17c3.js.map
